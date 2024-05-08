@@ -13,3 +13,15 @@ exports.registerUser = (req, res) => {
     res.json({ message: "User registered successfully" });
   });
 };
+
+exports.loginUser = (req, res) => {
+  const { username, password } = req.body;
+
+  User.authenticate(username, password, (err, user) => {
+    if (err || !user) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+    req.session.userId = user._id;
+    res.json({ message: "Login successfully" });
+  });
+};
